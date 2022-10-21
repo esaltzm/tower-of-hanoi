@@ -5,39 +5,35 @@ h1 {
 
 #rod-container {
     margin: 0 auto;
+    position: relative;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
     width: 1200px;
     height: 600px;
     background-color: white;
-    border-top: solid black 3px;
-    border-bottom: solid black 3px;
 }
 
 .rod {
-    width: 360px;
+    width: 30px;
     height: 600px;
-    border-left: solid black 3px;
-    border-right: solid black 3px;
     display: flex;
     flex-direction: column-reverse;
+    align-items: center;
+    overflow: visible;
+    background-color: rgb(142, 92, 43);
+}
+
+#base {
+    margin: 0 auto;
+    width: 1200px;
+    height: 30px;
+    background-color: rgb(142, 92, 43)
 }
 
 .ring {
+    border-radius: 10%;
     height: 100px;
-    border: solid black 3px;
+    border: solid black 1px;
     margin: 0 auto;
-}
-
-#rod1 {
-    background-color: lightcoral;
-}
-
-#rod2 {
-    background-color: lightgoldenrodyellow;
-}
-
-#rod3 {
-    background-color: lightcyan;
 }
