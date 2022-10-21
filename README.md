@@ -1,9 +1,9 @@
 // TO INCLUDE:
-- An embedded screenshot of the app
+- An embedded screenshot of the app\n
     // to add later
-- List of the Technologies used
+- List of the Technologies used\n
     Vanilla JavaScript - combination of HTML, CSS, and JS
-- Installation instructions
+- Installation instructions\n
     Visit hosted URL (to come later)
 - Your User stories – who are your users, what do they want and why?
     * AAU, I want to be greeted with a landing page that explains how to play the game before I continue on to play
@@ -13,7 +13,7 @@
     * AAU, I want some kind of celebratory signal to notify my when I have won the game
     * AAU, I want to be scored based on how quickly I won the game, and how few moves I have used to win
     * AAU, I want to have a leaderboard to see if I have gotten better at the game over time, and to try and solve the puzzles faster and with less moves
- Your Wireframes – sketches of major views / interfaces in your application
+ Your Wireframes – sketches of major views / interfaces in your application\n
     // to add later
- Descriptions of any Unsolved problems or major hurdles you had to overcome
+ Descriptions of any Unsolved problems or major hurdles you had to overcome\n
     // to add later
