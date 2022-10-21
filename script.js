@@ -9,9 +9,9 @@ for (let i = 0; i < nRings; i++) {
     ring.className = 'ring'
     ring.id = 'ring' + (i + 1)
     ring.style['background-color'] = colors[i]
-    ring.style.width = Math.floor(((nRings * 2) - 1 - (2 * i)) / ((nRings * 2) - 1) * rodWidth) + 'px'
+    ring.style.width = Math.floor(((nRings * 2) - 1 - (2 * i)) / ((nRings * 2) - 1) * rodWidth) - 2 + 'px'
     ring.draggable = true
-    document.querySelector('#rod1').appendChild(ring)
+    document.querySelector('#rodContainer1').appendChild(ring)
     ring.addEventListener('dragstart', (event) => {
         const currentRings = ring.parentElement.childNodes
         if (currentRings[currentRings.length - 1] == ring) {
@@ -23,7 +23,7 @@ for (let i = 0; i < nRings; i++) {
 document.addEventListener('dragover', (event) => event.preventDefault())
 document.addEventListener('drop', (event) => {
     event.preventDefault
-    if (event.target.className == 'rod') {
+    if (event.target.className == 'rodContainer' || event.target.className == 'rod') {
         addRing(event)
         if (isWon()) {
             console.log('game won!!!')
@@ -32,21 +32,24 @@ document.addEventListener('drop', (event) => {
 })
 
 function addRing(event) {
-    const rings = event.target.childNodes
+    let target = undefined
+    event.target.className == 'rodContainer' ? target = event.target : target = event.target.parentElement
+    let rings = target.childNodes
     const data = event.dataTransfer.getData("Text");
     const ring = document.getElementById(data)
     try {
-        if (rings.length == 0) {
-            event.target.appendChild(ring)
+        if (rings.length == 1) {
+            target.appendChild(ring)
         }
-        else if (parseInt(rings[0].style.width.slice(0, -2)) > parseInt(ring.style.width.slice(0, -2))) {
-            event.target.appendChild(ring)
+        else if (parseInt(rings[1].style.width.slice(0, -2)) > parseInt(ring.style.width.slice(0, -2))) {
+            target.appendChild(ring)
         }
     } catch (error) {
+        console.log(error)
         console.log('cannot move ring from under another ring')
     }
 }
 
 function isWon() {
-    return document.getElementById('rod3').childNodes.length == nRings ? true : false
+    return document.getElementById('rodContainer3').childNodes.length == nRings + 1 ? true : false
 }

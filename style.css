@@ -3,7 +3,7 @@ h1 {
     font-family: sans-serif;
 }
 
-#rod-container {
+#gameContainer {
     margin: 0 auto;
     position: relative;
     display: flex;
@@ -14,14 +14,20 @@ h1 {
     background-color: white;
 }
 
-.rod {
-    width: 30px;
+.rodContainer {
+    width: 33.3333%;
     height: 600px;
     display: flex;
     flex-direction: column-reverse;
     align-items: center;
-    overflow: visible;
+}
+
+.rod {
+    height: 600px;
+    width: 30px;
     background-color: rgb(142, 92, 43);
+    position: absolute;
+    z-index: 1;
 }
 
 #base {
@@ -32,8 +38,9 @@ h1 {
 }
 
 .ring {
-    border-radius: 10%;
+    border-radius: 10px;
     height: 100px;
     border: solid black 1px;
     margin: 0 auto;
+    z-index: 2;
 }
