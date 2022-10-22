@@ -5,8 +5,10 @@
 - Create winning modal with score and option to try next level
 */
 
-let nRings = 1
+let nRings = 6
 const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
+let wrongRing = undefined
+let rightRing = undefined
 
 initializeGame(nRings)
 
@@ -16,6 +18,11 @@ document.addEventListener('dragstart', (event) => {
         const currentRings = ring.parentElement.childNodes
         if (currentRings[currentRings.length - 1] == ring) {
             event.dataTransfer.setData("Text", event.target.id)
+        } else {
+            event.target.classList.add('glowing')
+            event.target.innerText = 'NOT VALID MOVE'
+            if (event.target.style['background-color'] == 'red') { event.target.style.color = 'black' }
+            wrongRing = event.target
         }
     }
 })
@@ -25,8 +32,18 @@ document.addEventListener('dragover', (event) => event.preventDefault())
 document.addEventListener('drop', (event) => {
     event.preventDefault
     if (event.target.className == 'rodContainer' || event.target.className == 'rod') {
-        addRing(event)
+        let rod = undefined
+        event.target.className == 'rodContainer' ? rod = event.target : rod = event.target.parentElement
+        let rings = rod.childNodes
+        const id = event.dataTransfer.getData("Text");
+        const ring = document.getElementById(id)
+        //const ringPosition = ring.getBoundingClientRect()
+        //console.log(ringPosition.top)
+        addRing(ring, rings, rod)
         isWon()
+    } else {
+        wrongRing.classList.remove('glowing')
+        wrongRing.innerText = ''
     }
 })
 
@@ -71,17 +88,16 @@ function moveRing(start, end) {
     endRod.appendChild(ring)
 }
 
-function addRing(event) {
-    let target = undefined
-    event.target.className == 'rodContainer' ? target = event.target : target = event.target.parentElement
-    let rings = target.childNodes
-    const data = event.dataTransfer.getData("Text");
-    const ring = document.getElementById(data)
-    if (rings.length == 1 || parseInt(rings[1].style.width.slice(0, -2)) > parseInt(ring.style.width.slice(0, -2))) {
-        target.appendChild(ring)
-    } else {
-        console.log('not valid move')
+function addRing(ring, rings, rod) {
+    if (ring == null) {
+        wrongRing.classList.remove('glowing')
+        wrongRing.innerText = ''
     }
+    else if (rings.length == 1 || parseInt(rings[1].style.width.slice(0, -2)) > parseInt(ring.style.width.slice(0, -2))) {
+        //setTimeout(() => rod.appendChild(ring), 1000)
+        rod.appendChild(ring)
+    }
+
 }
 
 function isWon() {
