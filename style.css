@@ -28,19 +28,27 @@ h1 {
     background-color: rgb(142, 92, 43);
     position: absolute;
     z-index: 1;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
 }
 
 #base {
     margin: 0 auto;
     width: 1200px;
     height: 30px;
+    margin-bottom: 30px;
     background-color: rgb(142, 92, 43)
 }
 
 .ring {
-    border-radius: 10px;
+    border-radius: 20px;
     height: 100px;
     border: solid black 1px;
     margin: 0 auto;
     z-index: 2;
+}
+
+#buttonContainer {
+    margin: 0 auto;
+    text-align: center;
 }
