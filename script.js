@@ -5,12 +5,14 @@
 - Create winning modal with score and option to try next level
 */
 
-let nRings = 4
+let nRings = 8
 
 const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
 let yLevels = []
 let wrongRing = undefined
-let rightRing = undefined
+let autoTime = 2000 * nRings
+console.log(autoTime)
+let autoMoves = []
 
 initializeGame(nRings)
 
@@ -19,10 +21,13 @@ document.addEventListener('dragstart', (event) => {
         const ring = event.target
         const currentRings = ring.parentElement.childNodes
         if (currentRings[currentRings.length - 1] == ring) {
-            rightRing = ring
             event.dataTransfer.setData("Text", event.target.id)
+            setTimeout(() => {
+                event.target.style.visibility = "hidden";
+            }, 1);
         } else {
             event.target.classList.add('glowing')
+            event.target.style['line-height'] = event.target.height
             event.target.innerText = 'NOT VALID MOVE'
             if (event.target.style['background-color'] == 'red') { event.target.style.color = 'black' }
             wrongRing = event.target
@@ -42,6 +47,7 @@ document.addEventListener('drop', (event) => {
         let rings = rod.childNodes
         const id = event.dataTransfer.getData("Text");
         const ring = document.getElementById(id)
+        ring.style.visibility = ''
         addRing(ring, rings, rod, event)
         isWon()
     } else {
@@ -54,7 +60,15 @@ document.addEventListener('drop', (event) => {
 document.addEventListener('click', (event) => {
     if (event.target.id == 'giveUp') {
         initializeGame(nRings)
+        autoMoves = []
         autoSolve(nRings, 1, 3)
+        console.log(autoMoves)
+        for (let i = 0; i < autoMoves.length; i++) {
+            setTimeout(() => {
+                console.log(autoMoves[i][0], '->', autoMoves[i][1])
+                autoAddRing(autoMoves[i][0], autoMoves[i][1])
+            }, autoTime / autoMoves.length * i);
+        }
     }
 })
 
@@ -65,7 +79,11 @@ function initializeGame(nRings) {
         let ring = document.createElement('div')
         ring.className = 'ring'
         ring.id = 'ring' + (i + 1)
-        ring.style['background-color'] = colors[i]
+        ring.style['background-color'] = colors[i % colors.length]
+        if (nRings < 5) {
+            ring.style.height = '100px'
+        } else { ring.style.height = 480 / nRings + 'px' }
+        //implement minimum width of ring so they arent too small
         ring.style.width = Math.floor(((nRings * 2) - 1 - (2 * i)) / ((nRings * 2) - 1) * rodWidth) - 2 + 'px'
         ring.draggable = true
         document.querySelector('#rodContainer1').appendChild(ring)
@@ -73,22 +91,24 @@ function initializeGame(nRings) {
     }
 }
 
+
 function autoSolve(n, start, end) {
     if (n == 1) {
-        moveRing(start, end)
+        autoMoves.push([start, end])
         isWon()
     }
     else {
         let other = 6 - (start + end)
         autoSolve(n - 1, start, other)
-        moveRing(start, end)
+        autoMoves.push([start, end])
         autoSolve(n - 1, other, end)
     }
 }
 
-function moveRing(start, end) {
+function autoAddRing(start, end) {
     let startRod = document.getElementById('rodContainer' + start)
     let endRod = document.getElementById('rodContainer' + end)
+    console.log(startRod, endRod)
     let ring = startRod.childNodes[startRod.childNodes.length - 1]
     endRod.appendChild(ring)
 }
@@ -104,8 +124,8 @@ function addRing(ring, rings, rod, event) {
             top: ${event.clientY}px;
             left: ${event.clientX}px;
             transition: 2s;
-            transform: translateY(${Math.abs(yLevels[rod.childNodes.length-1] - event.clientY)}px);
-        }`,8)
+            transform: translateY(${yLevels[rod.childNodes.length - 1] - event.clientY}px);
+        }`, 8)
         // find way to get ring.getBoundingClientRect at time of drop event, more accurate than event.clientXY
         // should end up at yLevels[rod.childNodes.length-1]
         ring.classList.add('drop')
@@ -113,10 +133,11 @@ function addRing(ring, rings, rod, event) {
             ring.classList.remove('drop')
             document.styleSheets[0].deleteRule(8)
             rod.appendChild(ring)
-        },1000)
+        }, 2000)
     }
 
 }
+
 
 function isWon() {
     if (document.getElementById('rodContainer3').childNodes.length == nRings + 1) {

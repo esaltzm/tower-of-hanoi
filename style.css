@@ -1,6 +1,9 @@
-h1 {
-    text-align: center;
+html, body{
     font-family: sans-serif;
+    text-align: center;
+    margin:0;
+    padding:0;
+    height:100%; 
 }
 
 #gameContainer {
@@ -23,7 +26,7 @@ h1 {
 }
 
 .rod {
-    height: 600px;
+    height: 500px;
     width: 30px;
     background-color: rgb(142, 92, 43);
     position: absolute;
@@ -43,7 +46,6 @@ h1 {
 .ring {
     position: relative;
     border-radius: 20px;
-    height: 100px;
     border: solid black 1px;
     margin: 0 auto;
     z-index: 2;
@@ -58,8 +60,14 @@ h1 {
     border: solid red 5px;
     box-shadow: 0 0 50px red;
     color: red;
-    text-align: center;
-    font-family: sans-serif;
-    line-height: 100px;
     overflow: hidden;
+}
+
+.modalContainer {
+    position: relative;
+    width: 100px;
+    left: 0px;
+    top: 0px;
+    opacity: 0.5;
+    background-color: black;
 }
