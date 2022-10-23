@@ -1,12 +1,14 @@
 /* TODO :
-- Animate rings dropping
+- Animate rings dropping (WORKING ON THIS)
 - Animate auto solve (figure out recursive setTimeout)
 - Create landing modal with directions
 - Create winning modal with score and option to try next level
 */
 
-let nRings = 6
+let nRings = 4
+
 const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
+let yLevels = []
 let wrongRing = undefined
 let rightRing = undefined
 
@@ -17,6 +19,7 @@ document.addEventListener('dragstart', (event) => {
         const ring = event.target
         const currentRings = ring.parentElement.childNodes
         if (currentRings[currentRings.length - 1] == ring) {
+            rightRing = ring
             event.dataTransfer.setData("Text", event.target.id)
         } else {
             event.target.classList.add('glowing')
@@ -27,7 +30,9 @@ document.addEventListener('dragstart', (event) => {
     }
 })
 
-document.addEventListener('dragover', (event) => event.preventDefault())
+document.addEventListener('dragover', (event) => {
+    event.preventDefault()
+})
 
 document.addEventListener('drop', (event) => {
     event.preventDefault
@@ -37,11 +42,10 @@ document.addEventListener('drop', (event) => {
         let rings = rod.childNodes
         const id = event.dataTransfer.getData("Text");
         const ring = document.getElementById(id)
-        //const ringPosition = ring.getBoundingClientRect()
-        //console.log(ringPosition.top)
-        addRing(ring, rings, rod)
+        addRing(ring, rings, rod, event)
         isWon()
     } else {
+        // wrong place for this
         wrongRing.classList.remove('glowing')
         wrongRing.innerText = ''
     }
@@ -56,7 +60,7 @@ document.addEventListener('click', (event) => {
 
 function initializeGame(nRings) {
     document.querySelectorAll('.ring').forEach(ring => ring.remove())
-    const rodWidth = parseInt(getComputedStyle(document.querySelector('#base')).width.slice(0, -2) / 3)
+    const rodWidth = parseInt(getComputedStyle(document.querySelector('#base')).width) / 3
     for (let i = 0; i < nRings; i++) {
         let ring = document.createElement('div')
         ring.className = 'ring'
@@ -65,6 +69,7 @@ function initializeGame(nRings) {
         ring.style.width = Math.floor(((nRings * 2) - 1 - (2 * i)) / ((nRings * 2) - 1) * rodWidth) - 2 + 'px'
         ring.draggable = true
         document.querySelector('#rodContainer1').appendChild(ring)
+        yLevels.push(ring.getBoundingClientRect().top)
     }
 }
 
@@ -88,14 +93,27 @@ function moveRing(start, end) {
     endRod.appendChild(ring)
 }
 
-function addRing(ring, rings, rod) {
+function addRing(ring, rings, rod, event) {
     if (ring == null) {
         wrongRing.classList.remove('glowing')
         wrongRing.innerText = ''
     }
-    else if (rings.length == 1 || parseInt(rings[1].style.width.slice(0, -2)) > parseInt(ring.style.width.slice(0, -2))) {
-        //setTimeout(() => rod.appendChild(ring), 1000)
-        rod.appendChild(ring)
+    else if (rings.length == 1 || parseInt(rings[1].style.width) > parseInt(ring.style.width)) {
+        document.styleSheets[0].insertRule(`.drop {
+            position: absolute;
+            top: ${event.clientY}px;
+            left: ${event.clientX}px;
+            transition: 2s;
+            transform: translateY(${Math.abs(yLevels[rod.childNodes.length-1] - event.clientY)}px);
+        }`,8)
+        // find way to get ring.getBoundingClientRect at time of drop event, more accurate than event.clientXY
+        // should end up at yLevels[rod.childNodes.length-1]
+        ring.classList.add('drop')
+        setTimeout(() => {
+            ring.classList.remove('drop')
+            document.styleSheets[0].deleteRule(8)
+            rod.appendChild(ring)
+        },1000)
     }
 
 }
