@@ -5,6 +5,8 @@
 - Create winning modal with score and option to try next level
 */
 
+// To fix positioning of drop transition - record offset of clientXY at dragstart
+
 let nRings = 8
 
 const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
@@ -13,6 +15,7 @@ let wrongRing = undefined
 let autoTime = 2000 * nRings
 console.log(autoTime)
 let autoMoves = []
+let offset = []
 
 initializeGame(nRings)
 
@@ -22,14 +25,14 @@ document.addEventListener('dragstart', (event) => {
         const currentRings = ring.parentElement.childNodes
         if (currentRings[currentRings.length - 1] == ring) {
             event.dataTransfer.setData("Text", event.target.id)
+            const rect = event.target.getBoundingClientRect()
+            offset.push(event.clientX - rect.left)
+            offset.push(event.clientY - rect.top)
             setTimeout(() => {
                 event.target.style.visibility = "hidden";
             }, 1);
         } else {
             event.target.classList.add('glowing')
-            event.target.style['line-height'] = event.target.height
-            event.target.innerText = 'NOT VALID MOVE'
-            if (event.target.style['background-color'] == 'red') { event.target.style.color = 'black' }
             wrongRing = event.target
         }
     }
@@ -47,11 +50,15 @@ document.addEventListener('drop', (event) => {
         let rings = rod.childNodes
         const id = event.dataTransfer.getData("Text");
         const ring = document.getElementById(id)
-        ring.style.visibility = ''
-        addRing(ring, rings, rod, event)
-        isWon()
+        if(ring) {
+            ring.style.visibility = ''
+            addRing(ring, rings, rod, event)
+            isWon()
+        } else {
+            wrongRing.classList.remove('glowing')
+            wrongRing.innerText = ''
+        }
     } else {
-        // wrong place for this
         wrongRing.classList.remove('glowing')
         wrongRing.innerText = ''
     }
@@ -115,25 +122,25 @@ function autoAddRing(start, end) {
 
 function addRing(ring, rings, rod, event) {
     if (ring == null) {
+        console.log(ring.id)
         wrongRing.classList.remove('glowing')
         wrongRing.innerText = ''
     }
     else if (rings.length == 1 || parseInt(rings[1].style.width) > parseInt(ring.style.width)) {
+        const rodRect = rod.getBoundingClientRect()
         document.styleSheets[0].insertRule(`.drop {
             position: absolute;
-            top: ${event.clientY}px;
-            left: ${event.clientX}px;
-            transition: 2s;
-            transform: translateY(${yLevels[rod.childNodes.length - 1] - event.clientY}px);
-        }`, 8)
-        // find way to get ring.getBoundingClientRect at time of drop event, more accurate than event.clientXY
-        // should end up at yLevels[rod.childNodes.length-1]
+            left: ${(rodRect.left + rodRect.right) / 2 - ring.offsetWidth / 2}px; ${/* positions ring on center of rod */''}
+            top: ${event.clientY - offset[1]}px; ${/* positions ring at height where user dragged it */''}
+            transition: 1s;
+            transform: translateY(${yLevels[rod.childNodes.length] - (event.clientY - offset[1])}px);
+        }`, 8) // ring ends up at appropriate height for number of rings already on the rod
         ring.classList.add('drop')
         setTimeout(() => {
             ring.classList.remove('drop')
             document.styleSheets[0].deleteRule(8)
             rod.appendChild(ring)
-        }, 2000)
+        }, 1000)
     }
 
 }
