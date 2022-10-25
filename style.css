@@ -105,8 +105,10 @@ h1 {
     cursor: pointer;
 }
 
-#instructions {}
+#instructions {
+    display: none;
+}
 
 #win {
-    visibility: hidden;
+    visibility: visible;
 }
