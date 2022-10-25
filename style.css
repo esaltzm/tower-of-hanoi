@@ -70,11 +70,14 @@ h1 {
 .button {
     padding: 10px;
     margin: 0 10px 0 10px;
+    font-size: 18px;
 }
 
 .button:hover,
 .button:focus {
     cursor: pointer;
+    box-shadow: 0 0 5px lightblue;
+    text-decoration: underline;
 }
 
 .glowing {
@@ -141,6 +144,10 @@ li {
     height: 150px;
 }
 
+.bold {
+    font-weight: bold;
+}
+
 #win {
     visibility: hidden;
 }
@@ -160,6 +167,7 @@ li {
     height: 60px;
     width: 60px;
     line-height: 60px;
+    border-radius: 10%;
 }
 
 .noAccess:hover,

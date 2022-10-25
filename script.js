@@ -10,6 +10,7 @@ let nRings = 1
 const styleSheet = document.styleSheets[0]
 const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
 let yLevels = []
+let withHelp = ''
 let wrongRing = undefined
 let autoTime
 (1.8 - 2.057143 * nRings + 1.142857 * nRings ** 2) * 1000 < 20000 ? autoTime = (1.8 - 2.057143 * nRings + 1.142857 * nRings ** 2) * 1000 : autoTime = 20000
@@ -78,8 +79,9 @@ document.addEventListener('click', (event) => {
         setTimeout(() => {
             isWon()
         }, autoTime + 1000)
+        withHelp = '<p>... with some help from the computer 👀</p>'
     }
-    if (event.target.id == 'closeInstructions') {
+    if (event.target.id == 'closeInstructions' || event.target.id == 'modalContainer') {
         document.getElementById('modalContainer').style.visibility = 'hidden'
         document.getElementById('instructions').style.visibility = 'hidden'
     }
@@ -105,7 +107,8 @@ document.addEventListener('click', (event) => {
             document.getElementById('win').style.visibility = 'hidden'
             document.getElementById('modalContainer').style.visibility = 'hidden'
             document.getElementById('win').innerHTML = `
-            <h2>🎉🎉 You Won EVERY LEVEL 🎉🎉</h2>
+            <h2>🎉 🎉  You Won EVERY LEVEL  🎉 🎉</h2>
+            ${withHelp}
             <p>Choose a level for fun (higher numbers get increasingly complex):</p>
             <form>
             <input type="number" id="input"></input>
