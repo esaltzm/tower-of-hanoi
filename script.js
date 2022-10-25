@@ -83,6 +83,9 @@ document.addEventListener('click', (event) => {
         document.getElementById('modalContainer').style.visibility = 'hidden'
         document.getElementById('instructions').style.visibility = 'hidden'
     }
+    if (event.target.id == 'restart') {
+        location.reload()
+    }
     if (event.target.classList.contains('next')) {
         if (parseInt(event.target.id.substring(event.target.id.length - 1)) < 6) {
             nRings++
@@ -105,14 +108,13 @@ document.addEventListener('click', (event) => {
             <h2>🎉🎉 You Won EVERY LEVEL 🎉🎉</h2>
             <p>Choose a level for fun (higher numbers get increasingly complex):</p>
             <form>
-            <input type="number"></input>
-            <button id="button">Try it!</button>
+            <input type="number" id="input"></input>
+            <button type= "button" id="button">Try it!</button>
             </form>`
         }
     }
     if (event.target.id == 'button') { // Page reloads every time you click this button???
-        nRings = document.querySelector('form').value
-        console.log(document.querySelector('form'), nRings)
+        nRings = document.getElementById('input').value
         initializeGame(nRings)
         document.getElementById('win').style.visibility = 'hidden'
         document.getElementById('modalContainer').style.visibility = 'hidden'

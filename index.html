@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="icon.png">
+    <link rel="icon" type="image/x-icon" href="img/icon.png">
     <link rel="stylesheet" href="style.css"/>
     <script src="script.js" defer></script>
     <title>Play Tower of Hanoi</title>
@@ -17,12 +17,25 @@
         <div class="rodContainer" id="rodContainer3"><div class="rod"></div></div>
     </div>
     <div id="base"></div>
-    <div id="buttonContainer"><button id="giveUp">I Give Up!</button></div>
+    <div id="buttonContainer">
+        <button class="button" id="restart">Start Over</button>
+        <button title="(get help from the computer)" class="button" id="giveUp">I Give Up!</button>
+    </div>
     <div id="modalContainer">
         <div class="modal" id="instructions">
             <span class="close" id="closeInstructions">&times;</span>
             <h2>Instructions — Tower of Hanoi</h2>
-            <p>Here is how to play the game: ...</p>
+            <ul>
+                <li>Goal: move all the rings from the left rod (#1) to the right rod (#3)</li>
+                <li>The rings must be in the same order as they were to begin with (largest on the bottom, smallest on the top)</li>
+                <li class="img"><img class="img" src="img/inst.png"></li>
+                <li>You can only pick up a ring from the top of a rod</li>
+                <li>You can only put a ring down on a rod if it is smaller than the other rings already there</li>
+                <li class="img">
+                    <img class="img" src="img/nodonot2.png">
+                    <img class="img" src="img/nodonot.png">
+                </li>
+            </ul>
         </div>
         <div class="modal" id="win">
             <h2>You Won 🎉</h2>

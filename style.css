@@ -57,9 +57,24 @@ h1 {
     z-index: 2;
 }
 
+.ring:hover,
+.ring:focus {
+    cursor: pointer;
+}
+
 #buttonContainer {
     margin: 0 auto;
     text-align: center;
+}
+
+.button {
+    padding: 10px;
+    margin: 0 10px 0 10px;
+}
+
+.button:hover,
+.button:focus {
+    cursor: pointer;
 }
 
 .glowing {
@@ -107,6 +122,23 @@ h1 {
 
 #instructions {
     visibility: visible;
+    height: 70%;
+}
+
+ul {
+    text-align: left;
+    margin: 0 20px 0 0;
+}
+
+li {
+    margin: 10px 0;
+}
+
+.img {
+    list-style: none;
+    margin: auto;
+    text-align: center;
+    height: 150px;
 }
 
 #win {
