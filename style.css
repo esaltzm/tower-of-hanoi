@@ -106,9 +106,45 @@ h1 {
 }
 
 #instructions {
-    display: none;
+    visibility: visible;
 }
 
 #win {
-    visibility: visible;
+    visibility: hidden;
+}
+
+#levelsContainer {
+    padding-top: 60px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 auto;
+    width: 90%;
+}
+
+.level {
+    background-color: grey;
+    height: 60px;
+    width: 60px;
+    line-height: 60px;
+}
+
+.noAccess:hover,
+.noAccess:focus {
+    background-color: darkred;
+}
+
+.past {
+    background-color: darkgreen;
+}
+
+.next {
+    background-color: lightgreen;
+}
+
+.next:hover,
+.next:focus {
+    box-shadow: 0 0 30px yellow;
+    cursor: pointer;
 }

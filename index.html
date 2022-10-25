@@ -25,18 +25,26 @@
             <p>Here is how to play the game: ...</p>
         </div>
         <div class="modal" id="win">
-            <span class="cTlose" id="closeWin">&times;</span>
             <h2>You Won 🎉</h2>
             <p>Move to the next level:</p>
             <div id="levelsContainer">
-                <div class="level" id="level1"></div>
-                <div class="level" id="level2"></div>
-                <div class="level" id="level3"></div>
-                <div class="level" id="level4"></div>
-                <div class="level" id="level5"></div>
-                <div class="level" id="level6"></div>
+                <div class="level past" id="level1">1</div>
+                <div class="level next" id="level2">2</div>
+                <div class="level noAccess" id="level3">3</div>
+                <div class="level noAccess" id="level4">4</div>
+                <div class="level noAccess" id="level5">5</div>
+                <div class="level noAccess" id="level6">6</div>
             </div>
         </div>
     </div>
 </body>
 </html>
+
+<div class="modal" id="win">
+    <h2>You Won 🎉</h2>
+    <p>Move to the next level:</p>
+    <form>
+        <input type="number"></input>
+        <button>Try it!</button>
+    </form>
+</div>
