@@ -96,7 +96,7 @@ document.addEventListener('click', (event) => {
             event.target.classList.add('past')
             document.getElementById('level' + (nRings + 1)).classList.remove('noAccess')
             document.getElementById('level' + (nRings + 1)).classList.add('next')
-            document.getElementById('win').style.visibility = 'hidden'
+            document.getElementById('win').style.display = 'none'
             document.getElementById('modalContainer').style.visibility = 'hidden'
         }
         else if (parseInt(event.target.id.substring(event.target.id.length - 1)) == 6) {
@@ -104,7 +104,7 @@ document.addEventListener('click', (event) => {
             initializeGame(nRings)
             event.target.classList.remove('next')
             event.target.classList.add('past')
-            document.getElementById('win').style.visibility = 'hidden'
+            document.getElementById('win').style.display = 'none'
             document.getElementById('modalContainer').style.visibility = 'hidden'
             document.getElementById('win').innerHTML = `
             <h2>🎉 🎉  You Won EVERY LEVEL  🎉 🎉</h2>
@@ -135,7 +135,7 @@ function initializeGame(nRings) {
         ring.style['background-color'] = colors[i % colors.length]
         if (nRings < 5) {
             ring.style.height = 'calc(100% / 6)'
-        } else { ring.style.height = 480 / nRings + 'px' }
+        } else { ring.style.height = `calc(70% / ${nRings})` }
         ring.style.width = ((nRings * 2) - 1 - (2 * i)) / ((nRings * 2) - 1) * 100 + '%'
         ring.draggable = true
         document.querySelector('#rodContainer1').appendChild(ring)
@@ -229,6 +229,6 @@ function isWon() {
     if (document.getElementById('rodContainer3').childNodes.length == nRings + 1) { // +1 accounts for rod div
         document.getElementById('modalContainer').style.visibility = 'visible'
         document.getElementById('instructions').style.display = 'none'
-        document.getElementById('win').style.visibility = 'visible'
+        document.getElementById('win').style.display = 'block'
     }
 }

@@ -17,6 +17,7 @@
         <div class="rodContainer" id="rodContainer3"><div class="rod"></div></div>
     </div>
     <div id="base"></div>
+    <div id="moveCounter"></div>
     <div id="buttonContainer">
         <button class="button" id="restart">Start Over</button>
         <button title="(get help from the computer)" class="button" id="giveUp">I Give Up!</button>
@@ -28,12 +29,12 @@
             <ul>
                 <li><span class="bold">Goal:</span> move all the rings from the left rod to the right rod</li>
                 <li>The rings must be in the <span class="bold">same order</span> as they were to begin with (largest on the bottom, smallest on the top)</li>
-                <li class="img"><img class="img" src="img/inst.png"></li>
+                <li class="img"><img id="img1" class="img" src="img/inst.png"></li>
                 <li>You can <span class="bold">only</span> pick up a ring from the <span class="bold">top</span> of a rod</li>
                 <li>You can <span class="bold">only</span> put a ring down on a rod if it is <span class="bold">smaller</span> than the other rings already there</li>
                 <li class="img">
-                    <img class="img" src="img/nodonot2.png">
-                    <img class="img" src="img/nodonot.png">
+                    <img class="img" id="img2" src="img/nodonot2.png">
+                    <img class="img" id="img3" src="img/nodonot.png">
                 </li>
             </ul>
         </div>
