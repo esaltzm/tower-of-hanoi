@@ -1,19 +1,18 @@
 /* TODO :
-- Animate rings dropping (WORKING ON THIS)
-- Animate auto solve (figure out recursive setTimeout)
-- Create landing modal with directions
-- Create winning modal with score and option to try next level
+- Refine rings dropping animation
+- Animate auto solve
+- Bug fix: prevent user from clicking 'I give up' button again before action is finished - causes funky errors!
 */
 
 let nRings = 1
 
 const styleSheet = document.styleSheets[0]
 const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
+const times = [500,2000,6000,10000,15000,20000]
+let autoTime = times[0]
 let yLevels = []
 let withHelp = ''
 let wrongRing = undefined
-let autoTime
-(1.8 - 2.057143 * nRings + 1.142857 * nRings ** 2) * 1000 < 20000 ? autoTime = (1.8 - 2.057143 * nRings + 1.142857 * nRings ** 2) * 1000 : autoTime = 20000
 let autoMoves = []
 let offset = []
 
@@ -92,6 +91,7 @@ document.addEventListener('click', (event) => {
         if (parseInt(event.target.id.substring(event.target.id.length - 1)) < 6) {
             nRings++
             initializeGame(nRings)
+            autoTime = times[nRings - 1]
             event.target.classList.remove('next')
             event.target.classList.add('past')
             document.getElementById('level' + (nRings + 1)).classList.remove('noAccess')
@@ -102,6 +102,7 @@ document.addEventListener('click', (event) => {
         else if (parseInt(event.target.id.substring(event.target.id.length - 1)) == 6) {
             nRings++
             initializeGame(nRings)
+            !times[nRings - 1] ? autoTime = 20000 : autoTime = times[nRings - 1]
             event.target.classList.remove('next')
             event.target.classList.add('past')
             document.getElementById('win').style.display = 'none'
@@ -135,7 +136,7 @@ function initializeGame(nRings) {
         ring.style['background-color'] = colors[i % colors.length]
         if (nRings < 5) {
             ring.style.height = 'calc(100% / 6)'
-        } else { ring.style.height = `calc(70% / ${nRings})` }
+        } else { ring.style.height = `calc(80% / ${nRings})` }
         ring.style.width = ((nRings * 2) - 1 - (2 * i)) / ((nRings * 2) - 1) * 100 + '%'
         ring.draggable = true
         document.querySelector('#rodContainer1').appendChild(ring)
