@@ -17,22 +17,22 @@ h1 {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    width: 1200px;
-    height: 600px;
+    width: 80%;
+    height: 50%;
     background-color: white;
 }
 
 .rodContainer {
     width: calc(100% / 3);
-    height: 600px;
+    height: 100%;
     display: flex;
     flex-direction: column-reverse;
     align-items: center;
 }
 
 .rod {
-    height: 500px;
-    width: 30px;
+    height: calc(100% / 6 * 5) ;
+    width: 3%;
     background-color: rgb(142, 92, 43);
     position: absolute;
     z-index: 1;
@@ -42,8 +42,8 @@ h1 {
 
 #base {
     margin: 0 auto;
-    width: 1200px;
-    height: 30px;
+    width: 80%;
+    height: 4%;
     margin-bottom: 30px;
     background-color: rgb(142, 92, 43)
 }
@@ -68,7 +68,8 @@ h1 {
 }
 
 .button {
-    padding: 10px;
+    height: 5%;
+    width: 10%;
     margin: 0 10px 0 10px;
     font-size: 18px;
 }
@@ -126,6 +127,8 @@ h1 {
 #instructions {
     visibility: visible;
     height: 70%;
+    overflow: auto;
+    display: inline-block;
 }
 
 ul {

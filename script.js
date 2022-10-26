@@ -86,7 +86,7 @@ document.addEventListener('click', (event) => {
         document.getElementById('instructions').style.visibility = 'hidden'
     }
     if (event.target.id == 'restart') {
-        location.reload()
+        initializeGame(nRings)
     }
     if (event.target.classList.contains('next')) {
         if (parseInt(event.target.id.substring(event.target.id.length - 1)) < 6) {
@@ -127,17 +127,16 @@ document.addEventListener('click', (event) => {
 function initializeGame(nRings) {
     document.querySelectorAll('.ring').forEach(ring => ring.remove())
     yLevels = []
-    const rodWidth = parseInt(getComputedStyle(document.querySelector('#base')).width) / 3
+    const rodWidth = parseInt(window.getComputedStyle(document.getElementById('rodContainer1')).width)
     for (let i = 0; i < nRings; i++) {
         let ring = document.createElement('div')
         ring.className = 'ring'
         ring.id = 'ring' + (i + 1)
         ring.style['background-color'] = colors[i % colors.length]
         if (nRings < 5) {
-            ring.style.height = '100px'
+            ring.style.height = 'calc(100% / 6)'
         } else { ring.style.height = 480 / nRings + 'px' }
-        //implement minimum width of ring so they arent too small
-        ring.style.width = Math.floor(((nRings * 2) - 1 - (2 * i)) / ((nRings * 2) - 1) * rodWidth) + 'px'
+        ring.style.width = ((nRings * 2) - 1 - (2 * i)) / ((nRings * 2) - 1) * 100 + '%'
         ring.draggable = true
         document.querySelector('#rodContainer1').appendChild(ring)
         yLevels.push(ring.getBoundingClientRect().top)
