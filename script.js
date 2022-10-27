@@ -14,7 +14,8 @@ let yLevels = []
 let withHelp = ''
 let wrongRing = undefined
 let autoMoves = []
-let offset = []
+let offsetY
+let currentRod
 
 initializeGame(nRings)
 
@@ -26,8 +27,7 @@ document.addEventListener('dragstart', (event) => {
         if (currentRings[currentRings.length - 1] == ring) {
             event.dataTransfer.setData("Text", event.target.id)
             const rect = event.target.getBoundingClientRect()
-            offset.push(event.clientX - rect.left)
-            offset.push(event.clientY - rect.top)
+            offsetY = (event.clientY - rect.top)
             setTimeout(() => {
                 event.target.style.visibility = "hidden";
             }, 1);
@@ -173,12 +173,13 @@ function addRing(ring, rings, rod, event) {
     if (rings.length == 1 || rings[1].offsetWidth > ring.offsetWidth) {
         const rodRect = rod.getBoundingClientRect()
         const width = ring.offsetWidth
+        const off = document.getElementById('gameContainer').getBoundingClientRect().left
         styleSheet.insertRule(`.drop {
             position: absolute;
-            left: ${(rodRect.left + rodRect.right) / 2 - width}px; ${/* positions ring on center of rod */''}
-            top: ${event.clientY - offset[1]}px; ${/* positions ring at height where user dragged it */''}
+            left: ${(rodRect.left + rodRect.right) / 2 - width / 2 - off}px; ${/* positions ring on center of rod */''}
+            top: ${event.clientY - offsetY}px; ${/* positions ring at height where user dragged it */''}
             transition: 1s;
-            transform: translateY(${yLevels[rod.childNodes.length - 1] - (event.clientY - offset[1]) - ring.offsetHeight - document.getElementById('base').offsetHeight}px);
+            transform: translateY(${yLevels[rod.childNodes.length - 1] - (event.clientY - offsetY) - ring.offsetHeight - document.getElementById('base').offsetHeight}px);
         }`, styleSheet.cssRules.length) // problem in translateY (rings go slightly below where they should be???)
         ring.classList.add('drop')
         setTimeout(() => {
