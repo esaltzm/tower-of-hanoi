@@ -4,17 +4,13 @@
 */
 
 let nRings = 1
-
-const styleSheet = document.styleSheets[0]
+let styleSheet = document.styleSheets[0]
+let offW = document.getElementById('gameContainer').getBoundingClientRect().left
+let offH = document.getElementById('gameContainer').getBoundingClientRect().top
 const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
 const times = [500, 2000, 6000, 10000, 15000, 20000]
 let autoTime = times[0]
-let yLevels = []
-let withHelp = ''
-let wrongRing = undefined
-let autoMoves = []
-let offsetY
-let currentRod
+let yLevels, withHelp, wrongRing, autoMoves, offsetY, currentRod
 
 initializeGame(nRings)
 
@@ -67,6 +63,7 @@ document.addEventListener('drop', (event) => {
 document.addEventListener('click', (event) => {
     if (event.target.id == 'giveUp') {
         initializeGame(nRings)
+        document.querySelectorAll('.ring').forEach(ring => ring.style.width = ring.offsetWidth + 'px')
         autoMoves = []
         autoSolve(nRings, 1, 3)
         for (let i = 0; i < autoMoves.length; i++) {
@@ -114,11 +111,11 @@ document.addEventListener('click', (event) => {
             <p>Choose a level for fun (higher numbers get increasingly complex):</p>
             <form>
             <input type="number" id="input"></input>
-            <button type= "button" id="button">Try it!</button>
+            <button type= "button" id="tryN">Try it!</button>
             </form>`
         }
     }
-    if (event.target.id == 'button') { // Page reloads every time you click this button???
+    if (event.target.id == 'tryN') {
         nRings = document.getElementById('input').value
         initializeGame(nRings)
         document.getElementById('win').style.visibility = 'hidden'
@@ -159,10 +156,26 @@ function autoSolve(n, start, end) {
 }
 
 function autoAddRing(start, end) {
-    let startRod = document.getElementById('rodContainer' + start)
-    let endRod = document.getElementById('rodContainer' + end)
-    let ring = startRod.childNodes[startRod.childNodes.length - 1]
-    endRod.appendChild(ring)
+    const startRod = document.getElementById('rodContainer' + start)
+    const endRod = document.getElementById('rodContainer' + end)
+    const ring = startRod.childNodes[startRod.childNodes.length - 1]
+    const ringRect = ring.getBoundingClientRect()
+    const offW = document.getElementById('gameContainer').getBoundingClientRect().left
+    const offH = document.getElementById('gameContainer').getBoundingClientRect().top
+    ring.style.width = ring.offsetWidth + 'px'
+    styleSheet.insertRule(`.move {
+        position: absolute;
+        left: ${ringRect.left - offW}px;
+        top: ${ringRect.top - offH}px;
+        transition: ${(autoTime / autoMoves.length - 50) / 1000}s;
+        transform: translate(${endRod.getBoundingClientRect().left - startRod.getBoundingClientRect().left}px, ${yLevels[endRod.childNodes.length - 1] - ringRect.top}px);
+        }`, styleSheet.cssRules.length) // translates element down to position where it should be on rod
+    ring.classList.add('move')
+    setTimeout(() => {
+        ring.classList.remove('move')
+        styleSheet.deleteRule(styleSheet.cssRules.length - 1)
+        endRod.appendChild(ring)
+    }, autoTime / autoMoves.length - 50)
 }
 
 function addRing(ring, rings, rod, event) {
@@ -171,12 +184,9 @@ function addRing(ring, rings, rod, event) {
         wrongRing.innerText = ''
     }
     if (rings.length == 1 || rings[1].offsetWidth > ring.offsetWidth) {
-        if (event.clientY < yLevels[rod.childNodes.length - 1]) {
-            const rodRect = rod.getBoundingClientRect()
-            const width = ring.offsetWidth
-            const offW = document.getElementById('gameContainer').getBoundingClientRect().left
-            const offH = document.getElementById('gameContainer').getBoundingClientRect().top
-            console.log(yLevels)
+        const rodRect = rod.getBoundingClientRect()
+        const width = ring.offsetWidth
+        if (yLevels[rod.childNodes.length - 1] - (event.clientY - offsetY) - offH > 0) {
             styleSheet.insertRule(`.drop {
             position: absolute;
             left: ${(rodRect.left + rodRect.right) / 2 - width / 2 - offW}px; ${/* positions ring on center of rod */''}
