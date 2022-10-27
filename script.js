@@ -12,6 +12,8 @@ const times = [500, 2000, 6000, 10000, 15000, 20000]
 let autoTime = times[0]
 let yLevels, withHelp, wrongRing, autoMoves, offsetY, currentRod
 
+document.getElementById('base').style.height = document.querySelector('.rod').offsetWidth + 'px'
+
 initializeGame(nRings)
 
 document.addEventListener('dragstart', (event) => {
@@ -49,7 +51,7 @@ document.addEventListener('drop', (event) => {
             addRing(ring, rings, rod, event)
             setTimeout(() => {
                 isWon()
-            }, 1800) // must be higher than 1 (time for drop transition)
+            }, 1800)
         }
     } else {
         ring.style.visibility = 'visible'
@@ -68,7 +70,7 @@ document.addEventListener('click', (event) => {
         autoSolve(nRings, 1, 3)
         for (let i = 0; i < autoMoves.length; i++) {
             setTimeout(() => {
-                autoAddRing(autoMoves[i][0], autoMoves[i][1])
+                autoAddRing(autoMoves[i][0], autoMoves[i][1], i)
             }, autoTime / autoMoves.length * i);
         }
         setTimeout(() => {
@@ -97,7 +99,6 @@ document.addEventListener('click', (event) => {
             document.getElementById('modalContainer').style.visibility = 'hidden'
         }
         else if (parseInt(event.target.id.substring(event.target.id.length - 1)) == 6) {
-            document.getElementById('giveUp').outerHTML = '<button title="(get help from the computer)" class="button" id="giveUp" onclick="this.disabled = true">I Give Up!</button>'
             nRings++
             initializeGame(nRings)
             !times[nRings - 1] ? autoTime = 20000 : autoTime = times[nRings - 1]
@@ -116,6 +117,7 @@ document.addEventListener('click', (event) => {
         }
     }
     if (event.target.id == 'tryN') {
+        document.getElementById('giveUp').outerHTML = '<button title="(get help from the computer)" class="button" id="giveUp" onclick="this.disabled = true">I Give Up!</button>'
         nRings = document.getElementById('input').value
         initializeGame(nRings)
         document.getElementById('win').style.visibility = 'hidden'
@@ -155,27 +157,32 @@ function autoSolve(n, start, end) {
     }
 }
 
-function autoAddRing(start, end) {
+function autoAddRing(start, end, i) {
     const startRod = document.getElementById('rodContainer' + start)
     const endRod = document.getElementById('rodContainer' + end)
     const ring = startRod.childNodes[startRod.childNodes.length - 1]
     const ringRect = ring.getBoundingClientRect()
     const offW = document.getElementById('gameContainer').getBoundingClientRect().left
     const offH = document.getElementById('gameContainer').getBoundingClientRect().top
-    ring.style.width = ring.offsetWidth + 'px'
-    styleSheet.insertRule(`.move {
+    if (nRings < 11) {
+        ring.style.width = ring.offsetWidth + 'px'
+        styleSheet.insertRule(`.move {
         position: absolute;
+        z-index: ${1000 + i};
         left: ${ringRect.left - offW}px;
         top: ${ringRect.top - offH}px;
         transition: ${(autoTime / autoMoves.length - 50) / 1000}s;
         transform: translate(${endRod.getBoundingClientRect().left - startRod.getBoundingClientRect().left}px, ${yLevels[endRod.childNodes.length - 1] - ringRect.top}px);
         }`, styleSheet.cssRules.length) // translates element down to position where it should be on rod
-    ring.classList.add('move')
-    setTimeout(() => {
-        ring.classList.remove('move')
-        styleSheet.deleteRule(styleSheet.cssRules.length - 1)
+        ring.classList.add('move')
+        setTimeout(() => {
+            ring.classList.remove('move')
+            styleSheet.deleteRule(styleSheet.cssRules.length - 1)
+            endRod.appendChild(ring)
+        }, autoTime / autoMoves.length - 50)
+    } else {
         endRod.appendChild(ring)
-    }, autoTime / autoMoves.length - 50)
+    }
 }
 
 function addRing(ring, rings, rod, event) {
