@@ -8,7 +8,7 @@ let nRings = 1
 
 const styleSheet = document.styleSheets[0]
 const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple']
-const times = [500,2000,6000,10000,15000,20000]
+const times = [500, 2000, 6000, 10000, 15000, 20000]
 let autoTime = times[0]
 let yLevels = []
 let withHelp = ''
@@ -21,6 +21,7 @@ initializeGame(nRings)
 document.addEventListener('dragstart', (event) => {
     if (event.target.className == 'ring') {
         const ring = event.target
+        ring.style.width = ring.offsetWidth + 'px'
         const currentRings = ring.parentElement.childNodes
         if (currentRings[currentRings.length - 1] == ring) {
             event.dataTransfer.setData("Text", event.target.id)
@@ -43,23 +44,23 @@ document.addEventListener('dragover', (event) => {
 
 document.addEventListener('drop', (event) => {
     event.preventDefault
+    const id = event.dataTransfer.getData("Text");
+    const ring = document.getElementById(id)
     if (event.target.className == 'rodContainer' || event.target.className == 'rod') {
         let rod = undefined
         event.target.className == 'rodContainer' ? rod = event.target : rod = event.target.parentElement
         let rings = rod.childNodes
-        const id = event.dataTransfer.getData("Text");
-        const ring = document.getElementById(id)
         if (ring) {
             ring.style.visibility = 'visible'
             addRing(ring, rings, rod, event)
             setTimeout(() => {
                 isWon()
             }, 1200) // must be higher than 1 (time for drop transition)
-        } else {
-            wrongRing.classList.remove('glowing')
-            wrongRing.innerText = ''
         }
     } else {
+        ring.style.visibility = 'visible'
+    }
+    if (wrongRing) {
         wrongRing.classList.remove('glowing')
         wrongRing.innerText = ''
     }
@@ -157,50 +158,12 @@ function autoSolve(n, start, end) {
     }
 }
 
-// function autoAddRing(start, end) {
-//     const startRod = document.getElementById('rodContainer' + start)
-//     const endRod = document.getElementById('rodContainer' + end)
-//     const ringMoving = startRod.childNodes[startRod.childNodes.length - 1]
-//     const rectRing = ringMoving.getBoundingClientRect()
-//     const rectRod = endRod.getBoundingClientRect()
-//     const timeMoving = autoTime / autoMoves.length - 10 // -10ms allows move to be completed before next call
-//     styleSheet.insertRule(`@keyframes autoMove {
-//         33% {
-//             top: ${rectRing.top - 525}px;
-//             left: ${rectRing.left}px;
-//         }
-//         66% {
-//             top: ${rectRing.top - 525}px;
-//             left: ${rectRod.left + (rectRod.offsetWidth - ringMoving.offsetWidth)}px;
-//         }
-//         99% {
-//             top: ${yLevels[endRod.childNodes.length - 1]}px;
-//             left: ${rectRod.left}px;
-//         }
-//         `, styleSheet.cssRules.length - 1)
-//     styleSheet.insertRule(`.moving {
-//         position: absolute;
-//         top: ${rectRing.top}px;
-//         left: ${rectRing.left}px;
-//         animation-name: autoMove;
-//         animation-time: ${timeMoving / 1000}s;
-//         `, styleSheet.cssRules.length)
-//     ringMoving.classList.add('moving')
-//     setTimeout(() => {
-//         ringMoving.classList.remove('moving')
-//         styleSheet.deleteRule(styleSheet.cssRules.length - 1)
-//         styleSheet.deleteRule(styleSheet.cssRules.length - 2)
-//         endRod.appendChild(ringMoving)
-//     }, timeMoving)
-// }
-
 function autoAddRing(start, end) {
     let startRod = document.getElementById('rodContainer' + start)
     let endRod = document.getElementById('rodContainer' + end)
     let ring = startRod.childNodes[startRod.childNodes.length - 1]
     endRod.appendChild(ring)
 }
-
 
 function addRing(ring, rings, rod, event) {
     if (ring == null) {
@@ -209,12 +172,13 @@ function addRing(ring, rings, rod, event) {
     }
     else if (rings.length == 1 || parseInt(rings[1].style.width) > parseInt(ring.style.width)) {
         const rodRect = rod.getBoundingClientRect()
+        const width = ring.offsetWidth
         styleSheet.insertRule(`.drop {
             position: absolute;
-            left: ${(rodRect.left + rodRect.right) / 2 - (ring.offsetWidth / 2)}px; ${/* positions ring on center of rod */''}
+            left: ${(rodRect.left + rodRect.right) / 2}px; ${/* positions ring on center of rod */''}
             top: ${event.clientY - offset[1]}px; ${/* positions ring at height where user dragged it */''}
             transition: 1s;
-            transform: translateY(${yLevels[rod.childNodes.length - 1] - (event.clientY - offset[1]) - (ring.offsetHeight / 2)}px);
+            transform: translateY(${yLevels[rod.childNodes.length - 1] - (event.clientY - offset[1]) - 10 - ring.offsetHeight}px);
         }`, styleSheet.cssRules.length) // problem in translateY (rings go slightly below where they should be???)
         ring.classList.add('drop')
         setTimeout(() => {
