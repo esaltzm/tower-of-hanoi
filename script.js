@@ -67,6 +67,7 @@ document.addEventListener('drop', (event) => {
 
 document.addEventListener('click', (event) => {
     if (event.target.id == 'giveUp') {
+        console.log(document.getElementById('giveUp').disabled)
         initializeGame(nRings)
         autoMoves = []
         autoSolve(nRings, 1, 3)
@@ -88,6 +89,7 @@ document.addEventListener('click', (event) => {
         initializeGame(nRings)
     }
     if (event.target.classList.contains('next')) {
+        document.getElementById('giveUp').outerHTML = '<button title="(get help from the computer)" class="button" id="giveUp" onclick="this.disabled = true">I Give Up!</button>'
         if (parseInt(event.target.id.substring(event.target.id.length - 1)) < 6) {
             nRings++
             initializeGame(nRings)

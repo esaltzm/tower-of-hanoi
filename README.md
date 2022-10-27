@@ -15,8 +15,8 @@ Here were some of the user stories I used as a guide while creating the game:
 
 Some of the struggles I overcame during this project:
 
-    * Animating a ring drop as it was placed on a rod — I knew that I wanted the rings to be draggable and
-    droppable to better mimic the user experience of the tangible version of this game. While tough to
+    * Animating a ring drop as it was placed on a rod — I knew that I wanted the rings to be draggable
+    and droppable to better mimic the user experience of the tangible version of this game. While tough to
     implement, the route I chose to make these drop animations happen was to create a custom CSS rule each
     time a user dropped a ring, including a transition based on the location where the ring was dropped, and
     where it was meant to end up on the rod.
