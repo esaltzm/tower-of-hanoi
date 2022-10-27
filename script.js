@@ -1,5 +1,4 @@
 /* TODO :
-- Bug fix: prevent user from clicking 'I give up' button again before action is finished - causes funky errors!
 - Add final ending screen with option to restart from level 1
 - implement move counter and scoring algorithm
 */
@@ -54,7 +53,7 @@ document.addEventListener('drop', (event) => {
             addRing(ring, rings, rod, event)
             setTimeout(() => {
                 isWon()
-            }, 1200) // must be higher than 1 (time for drop transition)
+            }, 1800) // must be higher than 1 (time for drop transition)
         }
     } else {
         ring.style.visibility = 'visible'
@@ -67,7 +66,6 @@ document.addEventListener('drop', (event) => {
 
 document.addEventListener('click', (event) => {
     if (event.target.id == 'giveUp') {
-        console.log(document.getElementById('giveUp').disabled)
         initializeGame(nRings)
         autoMoves = []
         autoSolve(nRings, 1, 3)
@@ -102,6 +100,7 @@ document.addEventListener('click', (event) => {
             document.getElementById('modalContainer').style.visibility = 'hidden'
         }
         else if (parseInt(event.target.id.substring(event.target.id.length - 1)) == 6) {
+            document.getElementById('giveUp').outerHTML = '<button title="(get help from the computer)" class="button" id="giveUp" onclick="this.disabled = true">I Give Up!</button>'
             nRings++
             initializeGame(nRings)
             !times[nRings - 1] ? autoTime = 20000 : autoTime = times[nRings - 1]
@@ -175,14 +174,16 @@ function addRing(ring, rings, rod, event) {
         if (event.clientY < yLevels[rod.childNodes.length - 1]) {
             const rodRect = rod.getBoundingClientRect()
             const width = ring.offsetWidth
-            const off = document.getElementById('gameContainer').getBoundingClientRect().left
+            const offW = document.getElementById('gameContainer').getBoundingClientRect().left
+            const offH = document.getElementById('gameContainer').getBoundingClientRect().top
+            console.log(yLevels)
             styleSheet.insertRule(`.drop {
             position: absolute;
-            left: ${(rodRect.left + rodRect.right) / 2 - width / 2 - off}px; ${/* positions ring on center of rod */''}
+            left: ${(rodRect.left + rodRect.right) / 2 - width / 2 - offW}px; ${/* positions ring on center of rod */''}
             top: ${event.clientY - offsetY}px; ${/* positions ring at height where user dragged it */''}
             transition: 1s;
-            transform: translateY(${yLevels[rod.childNodes.length - 1] - (event.clientY - offsetY) - ring.offsetHeight - document.getElementById('base').offsetHeight}px);
-            }`, styleSheet.cssRules.length) // problem in translateY (rings go slightly below where they should be???)
+            transform: translateY(${yLevels[rod.childNodes.length - 1] - (event.clientY - offsetY) - offH}px);
+            }`, styleSheet.cssRules.length) // translates element down to position where it should be on rod
             ring.classList.add('drop')
             setTimeout(() => {
                 ring.classList.remove('drop')
