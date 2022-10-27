@@ -1,7 +1,7 @@
 /* TODO :
-- Refine rings dropping animation
-- Animate auto solve
 - Bug fix: prevent user from clicking 'I give up' button again before action is finished - causes funky errors!
+- Add final ending screen with option to restart from level 1
+- implement move counter and scoring algorithm
 */
 
 let nRings = 1
@@ -22,12 +22,11 @@ initializeGame(nRings)
 document.addEventListener('dragstart', (event) => {
     if (event.target.className == 'ring') {
         const ring = event.target
-        ring.style.width = ring.offsetWidth + 'px'
         const currentRings = ring.parentElement.childNodes
+        ring.style.width = ring.offsetWidth + 'px'
         if (currentRings[currentRings.length - 1] == ring) {
             event.dataTransfer.setData("Text", event.target.id)
-            const rect = event.target.getBoundingClientRect()
-            offsetY = (event.clientY - rect.top)
+            offsetY = (event.clientY - event.target.getBoundingClientRect().top)
             setTimeout(() => {
                 event.target.style.visibility = "hidden";
             }, 1);
@@ -171,22 +170,26 @@ function addRing(ring, rings, rod, event) {
         wrongRing.innerText = ''
     }
     if (rings.length == 1 || rings[1].offsetWidth > ring.offsetWidth) {
-        const rodRect = rod.getBoundingClientRect()
-        const width = ring.offsetWidth
-        const off = document.getElementById('gameContainer').getBoundingClientRect().left
-        styleSheet.insertRule(`.drop {
+        if (event.clientY < yLevels[rod.childNodes.length - 1]) {
+            const rodRect = rod.getBoundingClientRect()
+            const width = ring.offsetWidth
+            const off = document.getElementById('gameContainer').getBoundingClientRect().left
+            styleSheet.insertRule(`.drop {
             position: absolute;
             left: ${(rodRect.left + rodRect.right) / 2 - width / 2 - off}px; ${/* positions ring on center of rod */''}
             top: ${event.clientY - offsetY}px; ${/* positions ring at height where user dragged it */''}
             transition: 1s;
             transform: translateY(${yLevels[rod.childNodes.length - 1] - (event.clientY - offsetY) - ring.offsetHeight - document.getElementById('base').offsetHeight}px);
-        }`, styleSheet.cssRules.length) // problem in translateY (rings go slightly below where they should be???)
-        ring.classList.add('drop')
-        setTimeout(() => {
-            ring.classList.remove('drop')
-            styleSheet.deleteRule(styleSheet.cssRules.length - 1)
+            }`, styleSheet.cssRules.length) // problem in translateY (rings go slightly below where they should be???)
+            ring.classList.add('drop')
+            setTimeout(() => {
+                ring.classList.remove('drop')
+                styleSheet.deleteRule(styleSheet.cssRules.length - 1)
+                rod.appendChild(ring)
+            }, 1000)
+        } else {
             rod.appendChild(ring)
-        }, 1000)
+        }
     }
 
 }
