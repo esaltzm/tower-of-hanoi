@@ -170,15 +170,15 @@ function addRing(ring, rings, rod, event) {
         wrongRing.classList.remove('glowing')
         wrongRing.innerText = ''
     }
-    else if (rings.length == 1 || parseInt(rings[1].style.width) > parseInt(ring.style.width)) {
+    if (rings.length == 1 || rings[1].offsetWidth > ring.offsetWidth) {
         const rodRect = rod.getBoundingClientRect()
         const width = ring.offsetWidth
         styleSheet.insertRule(`.drop {
             position: absolute;
-            left: ${(rodRect.left + rodRect.right) / 2}px; ${/* positions ring on center of rod */''}
+            left: ${(rodRect.left + rodRect.right) / 2 - width}px; ${/* positions ring on center of rod */''}
             top: ${event.clientY - offset[1]}px; ${/* positions ring at height where user dragged it */''}
             transition: 1s;
-            transform: translateY(${yLevels[rod.childNodes.length - 1] - (event.clientY - offset[1]) - 10 - ring.offsetHeight}px);
+            transform: translateY(${yLevels[rod.childNodes.length - 1] - (event.clientY - offset[1]) - ring.offsetHeight - document.getElementById('base').offsetHeight}px);
         }`, styleSheet.cssRules.length) // problem in translateY (rings go slightly below where they should be???)
         ring.classList.add('drop')
         setTimeout(() => {
