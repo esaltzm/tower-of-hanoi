@@ -14,6 +14,7 @@ Here were some of the user stories I used as a guide during the project, assumin
     <li>AAU, I want some kind of celebratory signal to notify my when I have won the game</li>
 <ul>
 
+
 My wireframe prior to development:
 
 ![image](img/wireframe.png)
