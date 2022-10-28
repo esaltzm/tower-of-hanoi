@@ -2,7 +2,7 @@ This is my version of the classic 'Tower of Hanoi' game, implemented with HTML, 
 
 ![image](img/game-shot.png)
 
-Access the game <a href="esaltzm.github.io/tower-of-hanoi">here</a>
+Access the game <a href="esaltzm.github.io/tower-of-hanoi">here</a> (esaltzm.github.io/tower-of-hanoi)
 
 Here were some of the user stories I used as a guide during the project, assuming that they are not familiar with this game:
 
