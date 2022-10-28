@@ -221,3 +221,7 @@ function isWon() {
         document.getElementById('win').style.display = 'block'
     }
 }
+
+// SOURCES
+// https://www.w3schools.com/howto/howto_css_modals.asp
+// https://www.youtube.com/watch?v=rf6uf3jNjbo&t=1050s (Tower of Hanoi Algorithm Explained)
